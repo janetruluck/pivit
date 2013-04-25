@@ -20,3 +20,7 @@ spec/fixtures/authentications.yml
 
 spec/cassettes/*
 spec/.DS_Store
+
+spec/pivit/.DS_Store
+
+spec/pivit/client/.DS_Store
