@@ -17,6 +17,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency "faraday_middleware"
   spec.add_dependency "hashie"
   spec.add_dependency "multi_xml"
+  spec.add_dependency "gyoku"
   spec.add_development_dependency "rspec"
   spec.add_development_dependency "rake"
   spec.add_development_dependency "vcr"

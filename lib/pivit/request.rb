@@ -1,4 +1,4 @@
-require 'multi_json'
+require 'gyoku'
 
 module Pivit
   module Request
@@ -39,10 +39,11 @@ module Pivit
         when :post
           with_query_params = options.delete(:with_query_params) || false
           if with_query_params
-            request.url(path, options)
+            request.url(path, { :project => options})
           else
+            body = Gyoku.xml({options.delete(:root) => options}, :key_converter => :none) unless options.empty?
             request.path = path
-            request.body = MultiJson.dump(options) unless options.empty?
+            request.body = body
           end
         end
       end
