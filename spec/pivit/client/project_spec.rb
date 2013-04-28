@@ -7,7 +7,7 @@ describe Pivit::Client do
   end
 
   describe ".project", :vcr do
-    let!(:pivit) { Pivit::Client.new(:username => ENV["USERNAME"], :password => ENV["PASSWORD"]) }
+    let!(:pivit) { Pivit::Client.new(:token => ENV["TOKEN"]) }
     let(:current_response) { pivit.project(ENV["PROJECT"]) }
 
     it "should return the project response" do
@@ -17,7 +17,7 @@ describe Pivit::Client do
   end
 
   describe ".projects", :vcr => {:cassette_name => "project/projects"} do
-    let!(:pivit) { Pivit::Client.new(:username => ENV["USERNAME"], :password => ENV["PASSWORD"]) }
+    let!(:pivit) { Pivit::Client.new(:token => ENV["TOKEN"]) }
     let(:current_response) { pivit.projects }
 
     it "should return an array of projects" do
@@ -30,25 +30,35 @@ describe Pivit::Client do
     end
   end
 
-
-  describe ".add_project", :vcr => {:cassette_name => "project/add_project"} do
-    let!(:pivit) { Pivit::Client.new(:username => ENV["USERNAME"], :password => ENV["PASSWORD"]) }
-    let(:current_response) { pivit.add_project({:name => "Awesome Test Project", :iteration_length => 2, :point_scale => "0,1,2,3,4"}) }
+  describe ".create_project", :type => :webmock do
+    let!(:pivit) { Pivit::Client.new(:token => ENV["TOKEN"]) }
+    let(:current_response) { pivit.create_project({:name => "Awesome Test Project", :iteration_length => 2, :point_scale => "0,1,2,3,4"}) }
 
     it "returns the project that was created" do
+      stub_request(:post, "https://www.pivotaltracker.com/services/v3/projects?project%5Biteration_length%5D=2&project%5Bname%5D=Awesome%20Test%20Project&project%5Bpoint_scale%5D=0,1,2,3,4").
+        to_return(:status => 200,
+                  :body => File.open(File.expand_path("../../../fixtures/stubs/project/project.xml", __FILE__)),
+                  :headers => {'Accept' => 'application/xml', 'Content-type' => 'application/xml',})
+
       current_response.should respond_to(:name)
     end
 
-    it "should be a hashie" do
-      current_response.should be_a(Hashie::Mash)
+    it "returns the project that was created with the attributes provided" do
+      stub_request(:post, "https://www.pivotaltracker.com/services/v3/projects?project%5Biteration_length%5D=2&project%5Bname%5D=Awesome%20Test%20Project&project%5Bpoint_scale%5D=0,1,2,3,4").
+        to_return(:status => 200,
+                  :body => File.open(File.expand_path("../../../fixtures/stubs/project/project.xml", __FILE__)),
+                  :headers => {'Accept' => 'application/xml', 'Content-type' => 'application/xml',})
+
+      current_response.name.should == "Cardassian War Plans"
     end
 
-    context "failed request", :vcr do
-      let(:current_response) { pivit.add_project({:with_query_params => false, :name => "Awesome Test Project", :iteration_length => 2, :point_scale => "0,1,2,3,4"}) }
-
-      it "returns the error message" do
-        current_response.should == "Project parameter required"
-      end
+    it "should be a hashie" do
+      stub_request(:post, "https://www.pivotaltracker.com/services/v3/projects?project%5Biteration_length%5D=2&project%5Bname%5D=Awesome%20Test%20Project&project%5Bpoint_scale%5D=0,1,2,3,4").
+        to_return(:status => 200,
+                  :body => File.open(File.expand_path("../../../fixtures/stubs/project/project.xml", __FILE__)),
+                  :headers => {'Accept' => 'application/xml', 'Content-type' => 'application/xml',})
+      
+      current_response.should be_a(Hashie::Mash)
     end
   end
 end

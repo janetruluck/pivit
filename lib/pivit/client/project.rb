@@ -40,23 +40,18 @@ module Pivit
       # Provide the parameters you wantt to use for the project via the options
       # hash 
       #
-      # @see http://www.pivotaltracker.com/help/api?version=v3#add_project
+      # @see http://www.pivotaltracker.com/help/api?version=v3#create_project
       #
       # @return [Hashie::Mash] project created response
       #
       # @example 
-      #   Pivit::Client.add_project({:name => "Test Project", :iteration_length
+      #   Pivit::Client.create_project({:name => "Test Project", :iteration_length
       #   => "2"})
       # 
       # @author Jason Truluck
-      def add_project(options = {})    
-        options.merge!(:with_query_params => true) if options[:with_query_params].nil?
-        response = post("projects", options).env
-        if response[:body].project.nil?
-          response[:body].message
-        else
-          response[:body].project
-        end
+      def create_project(options = {})
+        options = { :project => options }
+        post("projects", options).project
       end
     end
   end
