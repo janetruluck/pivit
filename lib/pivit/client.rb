@@ -4,6 +4,8 @@ require "pivit/connection"
 require "pivit/request"
 
 require "pivit/client/project"
+require "pivit/client/story"
+require "pivit/client/membership"
 module Pivit
   class Client
     attr_accessor(*Configuration::VALID_OPTIONS_KEYS)
@@ -22,5 +24,7 @@ module Pivit
     include Pivit::Connection
     include Pivit::Request
     include Pivit::Client::Project
+    include Pivit::Client::Story
+    include Pivit::Client::Membership
   end
 end
