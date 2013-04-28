@@ -1,5 +1,3 @@
-require 'gyoku'
-
 module Pivit
   module Request
     def get(path, options = {})
@@ -8,11 +6,19 @@ module Pivit
     end
 
     def post(path, options = {})
-      response = request(:post, path, options)
-      response
+      request(:post, path, options).body
+    end
+
+    def put(path, options={})
+      request(:put, path, options).body
+    end
+
+    def delete(path, options={})
+      request(:delete, path, options).body
     end
 
     # Builds the api endpoint to reach the Pivotal Api
+    #the api endpoint to reach the Pivotal Api
     #
     # @return [String] Endpoint
     #
@@ -36,15 +42,10 @@ module Pivit
         case method
         when :get
           request.url(path, options)
-        when :post
-          with_query_params = options.delete(:with_query_params) || false
-          if with_query_params
-            request.url(path, { :project => options})
-          else
-            body = Gyoku.xml({options.delete(:root) => options}, :key_converter => :none) unless options.empty?
-            request.path = path
-            request.body = body
-          end
+        when :post, :put
+          request.url(path, options)
+        when :delete
+          request.url(path, options)
         end
       end
       response
