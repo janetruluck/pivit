@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<story>
+  <id type="integer">48859617</id>
+  <project_id type="integer">795721</project_id>
+  <story_type>feature</story_type>
+  <url>https://www.pivotaltracker.com/story/show/48859617</url>
+  <estimate type="integer">2</estimate>
+  <current_state>started</current_state>
+  <description></description>
+  <name>Make it so</name>
+  <requested_by>Picard</requested_by>
+  <created_at type="datetime">2008/12/10 00:00:00 UTC</created_at>
+</story>
