@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<iterations type="array">
+  <iteration>
+    <id type="integer">2</id>
+    <number type="integer">2</number>
+    <start type="datetime">2013/05/01 00:00:00 EDT</start>
+    <finish type="datetime">2013/05/08 00:00:00 EDT</finish>
+    <team_strength type="float">1</team_strength>
+    <stories type="array">
+      <story>
+        <id type="integer">48862635</id>
+        <project_id type="integer">795721</project_id>
+        <story_type>feature</story_type>
+        <url>http://www.pivotaltracker.com/story/show/48862635</url>
+        <estimate type="integer">2</estimate>
+        <current_state>unstarted</current_state>
+        <description></description>
+        <name>Awesome Test story</name>
+        <requested_by>Jason Truluck</requested_by>
+        <created_at type="datetime">2013/04/28 00:24:00 UTC</created_at>
+        <updated_at type="datetime">2013/04/30 01:21:40 UTC</updated_at>
+      </story>
+      <story>
+        <id type="integer">48860219</id>
+        <project_id type="integer">795721</project_id>
+        <story_type>feature</story_type>
+        <url>http://www.pivotaltracker.com/story/show/48860219</url>
+        <estimate type="integer">2</estimate>
+        <current_state>unstarted</current_state>
+        <description></description>
+        <name>Awesome Test story</name>
+        <requested_by>Jason Truluck</requested_by>
+        <created_at type="datetime">2013/04/27 20:45:48 UTC</created_at>
+        <updated_at type="datetime">2013/04/30 01:21:41 UTC</updated_at>
+      </story>
+      <story>
+        <id type="integer">48962157</id>
+        <project_id type="integer">795721</project_id>
+        <story_type>feature</story_type>
+        <url>http://www.pivotaltracker.com/story/show/48962157</url>
+        <estimate type="integer">2</estimate>
+        <current_state>unstarted</current_state>
+        <description></description>
+        <name>Awesome Test story</name>
+        <requested_by>Jason Truluck</requested_by>
+        <created_at type="datetime">2013/04/30 01:18:10 UTC</created_at>
+        <updated_at type="datetime">2013/04/30 01:21:44 UTC</updated_at>
+      </story>
+      <story>
+        <id type="integer">48879093</id>
+        <project_id type="integer">795721</project_id>
+        <story_type>feature</story_type>
+        <url>http://www.pivotaltracker.com/story/show/48879093</url>
+        <estimate type="integer">2</estimate>
+        <current_state>unstarted</current_state>
+        <description></description>
+        <name>Awesome Test story</name>
+        <requested_by>Jason Truluck</requested_by>
+        <created_at type="datetime">2013/04/29 00:53:47 UTC</created_at>
+        <updated_at type="datetime">2013/04/30 01:21:46 UTC</updated_at>
+      </story>
+      <story>
+        <id type="integer">48877603</id>
+        <project_id type="integer">795721</project_id>
+        <story_type>feature</story_type>
+        <url>http://www.pivotaltracker.com/story/show/48877603</url>
+        <estimate type="integer">-1</estimate>
+        <current_state>unstarted</current_state>
+        <description></description>
+        <name>Awesome Test story</name>
+        <requested_by>Jason Truluck</requested_by>
+        <created_at type="datetime">2013/04/28 22:44:55 UTC</created_at>
+        <updated_at type="datetime">2013/04/30 01:21:38 UTC</updated_at>
+      </story>
+    </stories>
+  </iteration>
+</iterations>
