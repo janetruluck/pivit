@@ -98,7 +98,6 @@ describe Pivit::Client::Story do
 
     it "returns the story that was moved" do
       stub_request(:post, "https://www.pivotaltracker.com/services/v3/projects/795721/stories/48859617/moves?move%5Bmove%5D=before&move%5Btarget%5D=47998079").
-        with(:headers => {'Accept'=>'*/*', 'Content-Length'=>'0', 'User-Agent'=>'Faraday v0.8.7', 'X-Trackertoken'=>'a8edd0e3de062a74f94ce7284e85f618'}).
         to_return(:status => 200, 
                   :body => File.open(File.expand_path("../../../fixtures/stubs/story/delete_story.xml", __FILE__)),
                   :headers => {'Accept' => 'application/xml', 'Content-type' => 'application/xml',})
@@ -108,7 +107,6 @@ describe Pivit::Client::Story do
 
     it "should be a hashie" do
       stub_request(:post, "https://www.pivotaltracker.com/services/v3/projects/795721/stories/48859617/moves?move%5Bmove%5D=before&move%5Btarget%5D=47998079").
-        with(:headers => {'Accept'=>'*/*', 'Content-Length'=>'0', 'User-Agent'=>'Faraday v0.8.7', 'X-Trackertoken'=>'a8edd0e3de062a74f94ce7284e85f618'}).
         to_return(:status => 200, 
                   :body => File.open(File.expand_path("../../../fixtures/stubs/story/delete_story.xml", __FILE__)),
                   :headers => {'Accept' => 'application/xml', 'Content-type' => 'application/xml',})
@@ -122,7 +120,6 @@ describe Pivit::Client::Story do
 
     it "returns the story that was moved" do
       stub_request(:post, "https://www.pivotaltracker.com/services/v3/projects/795721/stories/48859617/moves?move%5Bmove%5D=after&move%5Btarget%5D=47998079").
-        with(:headers => {'Accept'=>'*/*', 'Content-Length'=>'0', 'User-Agent'=>'Faraday v0.8.7', 'X-Trackertoken'=>'a8edd0e3de062a74f94ce7284e85f618'}).
         to_return(:status => 200, 
                   :body => File.open(File.expand_path("../../../fixtures/stubs/story/delete_story.xml", __FILE__)),
                   :headers => {'Accept' => 'application/xml', 'Content-type' => 'application/xml',})
@@ -132,7 +129,6 @@ describe Pivit::Client::Story do
 
     it "should be a hashie" do
       stub_request(:post, "https://www.pivotaltracker.com/services/v3/projects/795721/stories/48859617/moves?move%5Bmove%5D=after&move%5Btarget%5D=47998079").
-        with(:headers => {'Accept'=>'*/*', 'Content-Length'=>'0', 'User-Agent'=>'Faraday v0.8.7', 'X-Trackertoken'=>'a8edd0e3de062a74f94ce7284e85f618'}).
         to_return(:status => 200, 
                   :body => File.open(File.expand_path("../../../fixtures/stubs/story/delete_story.xml", __FILE__)),
                   :headers => {'Accept' => 'application/xml', 'Content-type' => 'application/xml',})
