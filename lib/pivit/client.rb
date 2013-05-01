@@ -3,11 +3,13 @@ require "pivit/authentication"
 require "pivit/connection"
 require "pivit/request"
 
-require "pivit/client/project"
-require "pivit/client/story"
+require "pivit/client/activity"
+require "pivit/client/iteration"
 require "pivit/client/membership"
 require "pivit/client/note"
-require "pivit/client/iteration"
+require "pivit/client/project"
+require "pivit/client/story"
+require "pivit/client/task"
 
 module Pivit
   class Client
@@ -26,10 +28,13 @@ module Pivit
     include Pivit::Authentication
     include Pivit::Connection
     include Pivit::Request
-    include Pivit::Client::Project
-    include Pivit::Client::Story
+
+    include Pivit::Client::Activity
+    include Pivit::Client::Iteration
     include Pivit::Client::Membership
     include Pivit::Client::Note
-    include Pivit::Client::Iteration
+    include Pivit::Client::Project
+    include Pivit::Client::Story
+    include Pivit::Client::Task
   end
 end
