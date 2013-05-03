@@ -26,3 +26,5 @@ spec/pivit/.DS_Store
 spec/pivit/client/.DS_Store
 
 spec/irb_setup_script.rb
+
+.DS_Store
