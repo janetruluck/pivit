@@ -136,4 +136,21 @@ describe Pivit::Client::Story do
       current_response.should be_a(Hashie::Mash)
     end
   end
+
+  describe ".add_attachment", :vcr => {:cassette_name => "story/attachment"} do
+    let(:current_response) { 
+      pivit.add_attachment(
+        ENV["PROJECT"], 
+        ENV["STORY"], 
+        File.path(File.expand_path(ENV["FILE"], __FILE__))) 
+    }
+    
+    it "adds the attachment to the story" do
+      current_response.should_not be_nil
+    end
+
+    it "returns the status is pending" do
+      current_response.status.should == "Pending"
+    end
+  end
 end

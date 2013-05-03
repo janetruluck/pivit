@@ -147,6 +147,24 @@ module Pivit
         move_story(project_id, story_id, story_target_id, :after, options)
       end
 
+      # Add an attachement to a story
+      #
+      # @see http://www.pivotaltracker.com/help/api?version=v3#attachements
+      #
+      # @param [Integer] project_id the id of the project that contains the story
+      # @param [Integer] story_id the id of the story that is getting moved
+      # @param [String] file the location of the file to be attached
+      #
+      # @return [Hashie::Mash] story attachement response
+      #
+      # @example 
+      #   Pivit::Client.add_attachment(12345, 111111, "test.txt")
+      ##
+      # @author Jason Truluck
+      def add_attachment(project_id, story_id, file, options = {})
+        options.merge!(:payload => file)
+        post("projects/#{project_id}/stories/#{story_id}/attachments", options).attachment
+      end
 
 
       private
