@@ -8,9 +8,9 @@ Gem::Specification.new do |spec|
   spec.version       = Pivit::VERSION
   spec.authors       = ["Jason Truluck"]
   spec.email         = ["jason.truluck@gmail.com"]
-  spec.description   = %q{TODO: Write a gem description}
+  spec.description   = %q{Pivit is a wrapper for the Pivotal Tracker API}
   spec.summary       = spec.description
-  spec.homepage      = ""
+  spec.homepage      = "https://github.com/jasontruluck/pivit"
   spec.license       = "MIT"
 
   spec.add_dependency "faraday"
