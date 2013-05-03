@@ -32,11 +32,11 @@ module Pivit
 
     private
     def request(method, path, options = {})
-      url = options.delete(:endpoint) || build_endpoint
+      url     = options.delete(:endpoint) || build_endpoint
+      payload = options.delete(:payload)  || nil
+      payload = Faraday::UploadIO.new(payload, "application/octet-stream") unless payload.nil?
 
-      connection_options = {
-        :url => url
-      }
+      connection_options = {}.merge!(:url => url)
 
       response = connection(connection_options).send(method) do |request|
         case method
@@ -44,10 +44,12 @@ module Pivit
           request.url(path, options)
         when :post, :put
           request.url(path, options)
+          request.body = { :Filedata => payload } unless payload.nil?
         when :delete
           request.url(path, options)
         end
       end
+
       response
     end
   end

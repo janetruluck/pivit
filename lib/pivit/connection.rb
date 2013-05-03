@@ -9,6 +9,8 @@ module Pivit
       }.merge(options)
   
       connection = Faraday.new(options) do |build|
+        build.request :multipart
+        build.request :url_encoded
         build.use FaradayMiddleware::Mashify
         build.use FaradayMiddleware::ParseXml,  :content_type => /\bxml$/
         build.adapter  Faraday.default_adapter
