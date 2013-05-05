@@ -10,13 +10,8 @@ module Pivit
       #
       # @see http://www.pivotaltracker.com/help/api?version=v3#getting_stories
       #
-      # @param [Integer] project_id the id of the project that you want to
-      # retrieve stories from
-      # @param [Integer] story_id the id of the story that you want to
-      # retrieve
-      #
-      # @param [Integer] project_id the id of the project that contains the
-      # story
+      # @param [Integer] project_id the id of the project that you want to retrieve stories from
+      # @param [Integer] story_id the id of the story that you want to retrieve
       #
       # @return [Hashie::Mash] story response
       #
@@ -32,13 +27,20 @@ module Pivit
       #
       # @see http://www.pivotaltracker.com/help/api?version=v3#getting_stories
       #
-      # @param [Integer] project_id the id of the project that contains the
-      #stories
+      # You can also use any filter option provided by pivotal tracker by
+      # prefacing with the option :filter
+      #
+      # @see https://www.pivotaltracker.com/help/faq#howcanasearchberefined
+      #
+      # @param [Integer] project_id the id of the project that contains the stories
       #
       # @return [Hashie::Mash] stories response
       #
       # @example 
       #   Pivit::Client.stories(1111111)
+      #
+      #   
+      #   Pivit::Client.stories(1111111, {:filter => "type:bug,chore"})
       # 
       # @author Jason Truluck
       def stories(project_id, options = {})
@@ -47,18 +49,16 @@ module Pivit
 
       # Create a story
       # 
-      # Provide the parameters you want to use for the story via the options
-      # hash 
+      # Provide the parameters you want to use for the story via the options hash 
       #
       # @see http://www.pivotaltracker.com/help/api?version=v3#add_story
       #
-      # @param [Integer] project_id the id of the project that contains the
-      # story
+      # @param [Integer] project_id the id of the project that contains the story
       #
       # @return [Hashie::Mash] story created response
       #
       # @example 
-      #   Pivit::Client.create_story_type=> "feature", :name => "Story"})
+      #   Pivit::Client.create_story({:type => "feature", :name => "Story"})
       #
       # @author Jason Truluck
       def create_story(project_id, options = {})
@@ -73,14 +73,13 @@ module Pivit
       #
       # @see http://www.pivotaltracker.com/help/api?version=v3#update_story
       #
-      # @param [Integer] project_id the id of the project that contains the
-      # story
+      # @param [Integer] project_id the id of the project that contains the story
       # @param [Integer] story_id the id of the story that is getting updated
       #
       # @return [Hashie::Mash] story updated response
       #
       # @example 
-      #   Pivit::Client.update_story(12345, 11111, { :name => "awesome new story name"})
+      #   Pivit::Client.update_story(12345, 11111, {:name => "awesome new story name"})
       #
       # @author Jason Truluck
       def update_story(project_id, story_id, options = {})
@@ -89,18 +88,16 @@ module Pivit
       end
     
       # Delete a story
-      # 
       #
       # @see http://www.pivotaltracker.com/help/api?version=v3#delete_story
       #
-      # @param [Integer] project_id the id of the project that contains the
-      # story
+      # @param [Integer] project_id the id of the project that contains the story
       # @param [Integer] story_id the id of the story that is getting deleted
       #
       # @return [Hashie::Mash] story deleted response
       #
       # @example 
-      #   Pivit::Client.update_story(12345, 11111)
+      #   Pivit::Client.delete_story(12345, 11111)
       ##
       # @author Jason Truluck
       def delete_story(project_id, story_id, options = {})
@@ -111,11 +108,9 @@ module Pivit
       #
       # @see http://www.pivotaltracker.com/help/api?version=v3#move_story
       #
-      # @param [Integer] project_id the id of the project that contains the
-      # story
+      # @param [Integer] project_id the id of the project that contains the story
       # @param [Integer] story_id the id of the story that is getting moved
-      # @param [Integer] story_target_id the id of the story that the other
-      # story is moving before
+      # @param [Integer] story_target_id the id of the story that the other story is moving before
       #
       # @return [Hashie::Mash] story move response
       #
@@ -131,11 +126,9 @@ module Pivit
       #
       # @see http://www.pivotaltracker.com/help/api?version=v3#move_story
       #
-      # @param [Integer] project_id the id of the project that contains the
-      # story
+      # @param [Integer] project_id the id of the project that contains the story
       # @param [Integer] story_id the id of the story that is getting moved
-      # @param [Integer] story_target_id the id of the story that the other
-      # story is moving after
+      # @param [Integer] story_target_id the id of the story that the other story is moving after
       #
       # @return [Hashie::Mash] story move response
       #
