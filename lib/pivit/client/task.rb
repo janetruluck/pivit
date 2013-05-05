@@ -4,21 +4,15 @@ module Pivit
   class Client
     # Task management
     # 
-    # @see http://www.pivotaltracker.com/help/api?version=v3#getting_stories
+    # @see http://www.pivotaltracker.com/help/api?version=v3#tasks
     module Task
       # Retrieve a single task from your account
       #
-      # @see http://www.pivotaltracker.com/help/api?version=v3#getting_stories
+      # @see http://www.pivotaltracker.com/help/api?version=v3#view_task
       #
-      # @param [Integer] project_id the id of the project that you want to
-      # retrieve stories from
-      # @param [Integer] story_id the id of the story that you want to
-      # retrieve
-      # @param [Integer] task_id the id of the task that you want to
-      # retrieve
-      #
-      # @param [Integer] project_id the id of the project that contains the
-      # task
+      # @param [Integer] project_id the id of the project that you want to retrieve stories from
+      # @param [Integer] story_id the id of the story that you want to retrieve
+      # @param [Integer] task_id the id of the task that you want to retrieve
       #
       # @return [Hashie::Mash] task response
       #
@@ -32,7 +26,7 @@ module Pivit
 
       # Retrieve all tasks from a story
       #
-      # @see http://www.pivotaltracker.com/help/api?version=v3#getting_tasks
+      # @see http://www.pivotaltracker.com/help/api?version=v3#view_tasks
       #
       # @param [Integer] project_id the id of the project that contains the stories
       # @param [Integer] stroy_id the id of the story that contains the tasks
@@ -49,8 +43,7 @@ module Pivit
 
       # Create a task
       # 
-      # Provide the parameters you want to use for the task via the options
-      # hash 
+      # Provide the parameters you want to use for the task via the options hash 
       #
       # @see http://www.pivotaltracker.com/help/api?version=v3#add_task
       #
@@ -60,7 +53,7 @@ module Pivit
       # @return [Hashie::Mash] task created response
       #
       # @example 
-      #   Pivit::Client.create_task_type=> "feature", :name => "Task"})
+      #   Pivit::Client.create_task({:type=> "feature", :name => "Task"})
       #
       # @author Jason Truluck
       def create_task(project_id, story_id, options = {})
@@ -70,8 +63,7 @@ module Pivit
 
       # Update a task
       # 
-      # Provide the parameters you want to use for the task via the options
-      # hash 
+      # Provide the parameters you want to use for the task via the options hash 
       #
       # @see http://www.pivotaltracker.com/help/api?version=v3#update_task
       #
@@ -82,7 +74,7 @@ module Pivit
       # @return [Hashie::Mash] task updated response
       #
       # @example 
-      #   Pivit::Client.update_task(12345, 11111, 67890, { :name => "awesome new task name"})
+      #   Pivit::Client.update_task(12345, 11111, 67890, {:name => "awesome new task name"})
       #
       # @author Jason Truluck
       def update_task(project_id, story_id, task_id, options = {})
@@ -101,7 +93,7 @@ module Pivit
       # @return [Hashie::Mash] task deleted response
       #
       # @example 
-      #   Pivit::Client.update_task(12345, 11111, 67890)
+      #   Pivit::Client.delete_task(12345, 11111, 67890)
       #
       # @author Jason Truluck
       def delete_task(project_id, story_id, task_id, options = {})
