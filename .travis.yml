@@ -1,0 +1,57 @@
+---
+language: ruby
+script:
+- bundle exec rspec
+rvm:
+- rbx-19mode
+- 1.9.2
+- 1.9.3
+- 2.0.0
+env:
+  global:
+  - FILE="../../../fixtures/test.png"
+  - secure: ! 'fqJ5aunVswjYawgyH0yxchbQITTwza+xvQIlZYzjt+dOJdSoxCpC7Q5ijX1P
+
+      UuSWvvaR6p+RoQ2Ay8BctwYbYEyKlLwQ10gO49f85zfjGFUG5unsJ0b8pKYr
+
+      Rw4Y3OJeoCOoxTJC7jx6wQ6FLTG6CacTgNIJNT9L9piKcK6mNuw='
+  - secure: ! 'POOsQ8XnDePv9wsfc57oNqglTyoQeIKj1YqB+3yP6B08URU12p5nzVuIHSe5
+
+      /oeeNC6plUveYyxgHvbvqxlz5mauS7LaspS0IQNKtlcVt3W36s3f5iEhLPXP
+
+      Mmxh5K+VysGgHv6TfsaUWEWuCYjeVXNOZYN1eWDtPzPPN4Y69AE='
+  - secure: ! 'QPA+Ol+HzaxDreJ6VF7LuBLsIBlIvPLTxZn9eHg9IdhxuiWO1hBZ9NF3Oc61
+
+      1mAPxspVDGdpUO6M/58mK6+Dcutsu5p5XxU548cpizGTpYOMqi7WUl9n/DkJ
+
+      8uikI7uv9xY38ejqI5Qlt1gA1d0EeJcsZLTibfAKGEHJlHV0K0s='
+  - secure: ! 'MBqHAny8Sl0qIjEIWIVQuYAFj0NJ2EixTg7QTbo7ywyisO076KYcDIC0rzKw
+
+      uiaOO5ugsBfqXb3LL6J674Aiqn4ghL52nZe2Z50yYZDF2tS3tUgdORfWCdUi
+
+      vHus2ko47bBkgzOzTbr1fvAV/+wnx6vl6y44hAbPeuWCrOaYZhE='
+  - secure: ! 'UYwqVsc2Bg96Ne5MvFXjM00SwHst36kvb9zgaHJ/+ln0oVVfgTvQf8jIMbjK
+
+      kYAMG8LHXG/oPnz8RWn5Ao8Y4ZkxRo/pWtbbmkdFB9oddXZ8yAzrQxOTsMym
+
+      4a+qvahRCfQhM9KW6WwnO73oxkZNCdkp+6IjNltSAr6wNdgkDg4='
+  - secure: ! 'Ylm2LEU1MIWFhHcNtoc9nfJT9/nIAa98uu6NvQ6e92W/spsHsFnHQiTiHq3Q
+
+      IEL01LaicbxBLropqPYaVyWNy0LIzzs7TsWKGHNZCOJ4IqwWIlZttJ7kBl5m
+
+      A8NM0Gk6uROjDMbGAgyNs/quJCBuz3Rxw4vjG597sHRQZ5vGgaM='
+  - secure: ! 'Tz8ZTw89lam/XrqHQ183W6zF2+mkll8haaGehXe1P3VxjgOiMcUdpQ3h4ECM
+
+      Q7EixihnevToJ16bw2BzmMm84hAihtMEH12MC9XGGe+/fGQQV4ol/T8tT1R8
+
+      o5w1X6YgCsqrIVILT9bgCzaticvBMb81ulYqBKTdYNPdRWisuXs='
+  - secure: ! 'RxvMx+HOSIIbu9Xhw1EWuu5Nch2dU5B0A+Z9uRmcT/cWphDRkUjaZ04qjvWt
+
+      UvqZERlM9i5pWe6T8SnocVQKkM7LUN0KXCR+8SMnvrnddwRBSjr+z+XCD8qe
+
+      8evyDyyoqT0iVrdtr2iysWjWkKbH/voJQT4RqIp8sKMdIG+45og='
+  - secure: ! 'gofZwOF5cuLcBpfVmsioIk/DIunwAjNPCFE67tuPgXwcKeBY+0wqa3NXDmA2
+
+      6rjrY/TmXCYIc2E+i0QEpaiXb6N5CweyaBVEUNofFbzw8HsOMvNEnLWdHACP
+
+      vh5pL8m8T8z/tKXaObZBDGyTI2zoQSN/OIpVbhGWTTDHGmeRfuc='
