@@ -28,7 +28,7 @@ describe Pivit::Client::Note do
     let(:current_response) { pivit.create_note(ENV["PROJECT"], ENV["STORY"], ENV["NOTE"]) }
 
     it "returns the note that was created" do
-      stub_request(:post, "https://www.pivotaltracker.com/services/v3/projects/795721/stories?note%5Btext%5D=This%20is%20some%20note%20text").
+      stub_request(:post, "https://www.pivotaltracker.com/services/v3/projects/795721/stories?note%5Btext%5D=This").
         to_return(:status => 200, 
                   :body => File.open(File.expand_path("../../../fixtures/stubs/note.xml", __FILE__)),
                   :headers => {'Accept' => 'application/xml', 'Content-type' => 'application/xml',})
@@ -37,7 +37,7 @@ describe Pivit::Client::Note do
     end
 
     it "be a hashie" do
-      stub_request(:post, "https://www.pivotaltracker.com/services/v3/projects/795721/stories?note%5Btext%5D=This%20is%20some%20note%20text").
+      stub_request(:post, "https://www.pivotaltracker.com/services/v3/projects/795721/stories?note%5Btext%5D=This").
         to_return(:status => 200, 
                   :body => File.open(File.expand_path("../../../fixtures/stubs/note.xml", __FILE__)),
                   :headers => {'Accept' => 'application/xml', 'Content-type' => 'application/xml',})
