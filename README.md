@@ -1,4 +1,4 @@
-# Pivit 
+# Pivit [![Build Status](https://travis-ci.org/jasontruluck/pivit.png?branch=master)](https://travis-ci.org/jasontruluck/pivit)
 
 Pivit is a api wrapper for the Pivotal Tracker API. Most features are currently
 build out but some are still being implemented.
