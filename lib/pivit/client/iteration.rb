@@ -2,11 +2,11 @@ module Pivit
   class Client
     # Iteration management
     # 
-    # @see http://www.pivotaltracker.com/help/api?version=v3#getting_iterations
+    # @see https://www.pivotaltracker.com/help/api?version=v3#get_iterations
     module Iteration
       # Retrieve all iterations from the project
       #
-      # @see http://www.pivotaltracker.com/help/api?version=v3#getting_iterations
+      # @see https://www.pivotaltracker.com/help/api?version=v3#get_iterations
       #
       # @param project_id the id of the project
       #
@@ -22,7 +22,7 @@ module Pivit
 
       # Retrieve all done iterations from the project
       #
-      # @see http://www.pivotaltracker.com/help/api?version=v3#getting_iterations
+      # @see https://www.pivotaltracker.com/help/api?version=v3#get_iterations
       #
       # @param project_id the id of the project
       #
@@ -36,9 +36,9 @@ module Pivit
         get("projects/#{project_id}/iterations/done", options).iterations
       end
 
-      # Retrieve all iterations from the project
+      # Retrieve all backlog iterations group from the project
       #
-      # @see http://www.pivotaltracker.com/help/api?version=v3#getting_iterations
+      # @see https://www.pivotaltracker.com/help/api?version=v3#get_iterations
       #
       # @param project_id the id of the project
       #
@@ -52,9 +52,9 @@ module Pivit
         get("projects/#{project_id}/iterations/backlog", options).iterations
       end
 
-      # Retrieve all iterations from the project
+      # Retrieve all current iterations group from the project
       #
-      # @see http://www.pivotaltracker.com/help/api?version=v3#getting_iterations
+      # @see https://www.pivotaltracker.com/help/api?version=v3#get_iterations
       #
       # @param project_id the id of the project
       #
@@ -68,9 +68,9 @@ module Pivit
         get("projects/#{project_id}/iterations/current", options).iterations
       end
       
-      # Retrieve all iterations from the project
+      # Retrieve all current and backlog iterations from the project
       #
-      # @see http://www.pivotaltracker.com/help/api?version=v3#getting_iterations
+      # @see https://www.pivotaltracker.com/help/api?version=v3#get_iterations
       #
       # @param project_id the id of the project
       #
