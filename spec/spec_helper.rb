@@ -33,14 +33,12 @@ VCR.configure do |c|
   c.configure_rspec_metadata!
 end
 
-WebMock.allow_net_connect!
-
 Dir[File.expand_path("spec/support/**/*.rb", __FILE__)].each {|f| require f}
 
 RSpec.configure do |config|
   config.treat_symbols_as_metadata_keys_with_true_values = true
   config.order                                           = "random"
-  config.color_enabled = true
+  config.color_enabled                                   = true
 
   config.before :type => :webmock do
     WebMock.disable_net_connect!
