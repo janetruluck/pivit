@@ -18,15 +18,15 @@ module Pivit
     end
 
     # Builds the api endpoint to reach the Pivotal Api
-    #the api endpoint to reach the Pivotal Api
+    # the api endpoint to reach the Pivotal Api
     #
     # @return [String] Endpoint
     #
     # @author Jason Truluck
     def build_endpoint
-      endpoint = ssl || self.api_token.nil? ? "https://" : "http://"
+      endpoint = self.ssl ? "https://" : "http://"
       endpoint << "#{self.username}:#{self.password}@" unless self.authenticated?
-      endpoint << "www.pivotaltracker.com/services/v3/"
+      endpoint << "www.pivotaltracker.com/services/v5/"
       self.api_endpoint = endpoint
     end
 
