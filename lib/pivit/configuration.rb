@@ -23,7 +23,7 @@ module Pivit
       self.username            = nil
       self.password            = nil
       self.api_token           = nil
-      self.ssl                 = true
+      self.ssl                 = false
     end
   end
 end
