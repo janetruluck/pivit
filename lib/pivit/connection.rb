@@ -12,7 +12,7 @@ module Pivit
         build.request :multipart
         build.request :url_encoded
         build.use FaradayMiddleware::Mashify
-        build.use FaradayMiddleware::ParseXml,  :content_type => /\bxml$/
+        build.use FaradayMiddleware::ParseJson,  :content_type => /\bjson$/
         build.adapter  Faraday.default_adapter
       end
 
