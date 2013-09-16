@@ -2,63 +2,73 @@ require "spec_helper"
 
 # Client Spec
 describe Pivit::Client do
-  before do
+  let!(:pivit) { Pivit::Client.new(:token => "super_secret") }
+
+  before(:each) do
     Pivit.reset!
   end
 
-  describe ".project", :vcr do
-    let!(:pivit) { Pivit::Client.new(:token => ENV["TOKEN"]) }
-    let(:current_response) { pivit.project(ENV["PROJECT"]) }
+  describe ".project" do
+    let(:current_response) { pivit.project(99) }
 
-    it "should return the project response" do
-      current_response.should_not be_nil
-      current_response.should respond_to(:name)
+    before(:each) do
+      stub_pivotal(:get, "/projects/99", "project.json", 200)
+    end
+
+    it "returns the project response" do
+      expect(current_response).not_to be_nil
+    end
+
+    it "is a project" do
+      expect(current_response.kind).to eq("project")
+    end
+
+    it "is the same project as requested" do
+      expect(current_response.id).to eq(99)
     end
   end
 
-  describe ".projects", :vcr => {:cassette_name => "project/projects"} do
-    let!(:pivit) { Pivit::Client.new(:token => ENV["TOKEN"]) }
+  describe ".projects" do
     let(:current_response) { pivit.projects }
 
-    it "should return an array of projects" do
-      current_response.should be_a(Array)
-      current_response.first.should respond_to(:account)
+    before(:each) do
+      stub_pivotal(:get, "/projects", "projects.json", 200)
     end
 
-    it "should return the projects" do
-      current_response.should_not be_nil
+    it "returns an array" do
+      expect(current_response).to be_a(Array)
+    end
+
+    it "returns an array of projects" do
+      current_response.each{|x| expect(x.kind).to eq("project") }
     end
   end
 
-  describe ".create_project", :type => :webmock do
-    let!(:pivit) { Pivit::Client.new(:token => ENV["TOKEN"]) }
-    let(:current_response) { pivit.create_project({:name => "Awesome Test Project", :iteration_length => 2, :point_scale => "0,1,2,3,4"}) }
+  describe ".create_project" do
+    let(:iteration_length) { 2 }
+    let(:point_scale) { "0,1,2,3,4" }
+    let(:current_response) { 
+      pivit.create_project({:name => "Awesome Test Project", :iteration_length => iteration_length, :point_scale => point_scale} ) 
+    }
 
-    it "returns the project that was created" do
-      stub_request(:post, "https://www.pivotaltracker.com/services/v3/projects?project%5Biteration_length%5D=2&project%5Bname%5D=Awesome%20Test%20Project&project%5Bpoint_scale%5D=0,1,2,3,4").
-        to_return(:status => 200,
-                  :body => File.open(File.expand_path("../../../fixtures/stubs/project/project.xml", __FILE__)),
-                  :headers => {'Accept' => 'application/xml', 'Content-type' => 'application/xml',})
-
-      current_response.should respond_to(:name)
+    before(:each) do
+      stub_pivotal(:post, "/projects?project%5Biteration_length%5D=#{iteration_length}&project%5Bname%5D=Awesome%20Test%20Project&project%5Bpoint_scale%5D=#{point_scale}", "create_project.json", 200)
     end
 
-    it "returns the project that was created with the attributes provided" do
-      stub_request(:post, "https://www.pivotaltracker.com/services/v3/projects?project%5Biteration_length%5D=2&project%5Bname%5D=Awesome%20Test%20Project&project%5Bpoint_scale%5D=0,1,2,3,4").
-        to_return(:status => 200,
-                  :body => File.open(File.expand_path("../../../fixtures/stubs/project/project.xml", __FILE__)),
-                  :headers => {'Accept' => 'application/xml', 'Content-type' => 'application/xml',})
+    it "returns the project that was created" do
+      expect(current_response).to respond_to(:name)
+    end
 
-      current_response.name.should == "Cardassian War Plans"
+    it "creates the project with the specified iteration lenght" do
+      expect(current_response.iteration_length).to eq(iteration_length)
+    end
+
+    it "creates the project with the specified point scale" do
+      expect(current_response.point_scale).to eq(point_scale)
     end
 
     it "should be a hashie" do
-      stub_request(:post, "https://www.pivotaltracker.com/services/v3/projects?project%5Biteration_length%5D=2&project%5Bname%5D=Awesome%20Test%20Project&project%5Bpoint_scale%5D=0,1,2,3,4").
-        to_return(:status => 200,
-                  :body => File.open(File.expand_path("../../../fixtures/stubs/project/project.xml", __FILE__)),
-                  :headers => {'Accept' => 'application/xml', 'Content-type' => 'application/xml',})
-      
-      current_response.should be_a(Hashie::Mash)
+      expect(current_response).to be_a(Hashie::Mash)
     end
   end
 end
