@@ -2,123 +2,101 @@ require "spec_helper"
 
 # Task Spec
 describe Pivit::Client::Task do
+  let!(:pivit) { Pivit::Client.new(:token => "super_secret") }
+  let(:project_id) { 99 }
+  let(:story_id) { 555 }
+  let(:task_id) { 5 }
+
   before do
     Pivit.reset!
   end
 
-  let!(:pivit) { Pivit::Client.new(:token=> ENV["TOKEN"]) }
+  describe ".task" do
+    let(:current_response) { pivit.task(project_id, story_id, task_id) }
 
-  describe ".task", :vcr => {:cassette_name => "task/task"} do
-    let(:current_response) { pivit.task(ENV["PROJECT"], ENV["STORY"], ENV["TASK"]) }
-
-    it "return the task response" do
-      current_response.should_not be_nil
+    before(:each) do
+      stub_pivotal(:get, "/projects/#{project_id}/stories/#{story_id}/tasks/#{task_id}", "story_task.json")
     end
 
-    it "responds to description" do
-      current_response.should respond_to(:description)
-    end
-  end
-
-  describe ".tasks", :vcr => {:cassette_name => "task/tasks"} do
-    let(:current_response) { pivit.tasks(ENV["PROJECT"], ENV["STORY"]) }
-
-    it "should return an array of tasks" do
-      current_response.should be_a(Array)
+    it "is not nil" do
+      expect(current_response).to_not be_nil
     end
 
-    it "responds to description" do
-      current_response.each{|x|  x.should respond_to(:description) }
-    end
-
-    it "should return the tasks" do
-      current_response.should_not be_nil
+    it "returns the task requested" do
+      expect(current_response.id).to eq(task_id)
     end
   end
 
-  describe ".create_task", :type => :webmock do
-    let(:description) { "find shields" }
-    let(:current_response) { pivit.create_task(ENV["PROJECT"], ENV["STORY"], { :description => description })}
+  describe ".tasks" do
+    let(:current_response) { pivit.tasks(project_id, story_id) }
 
-    it "returns the task that was created" do
-      stub_request(:post, "https://www.pivotaltracker.com/services/v3/projects/795721/stories/48859617/tasks?task%5Bdescription%5D=find%20shields").
-        to_return(:status => 200,
-                  :body => File.open(File.expand_path("../../../fixtures/stubs/task.xml", __FILE__)),
-                  :headers => {'Accept' => 'application/xml', 'Content-type' => 'application/xml',})
+    before(:each) do
+      stub_pivotal(:get, "/projects/#{project_id}/stories/#{story_id}/tasks", "story_tasks.json")
+    end
 
-      current_response.should respond_to(:description)
+    it "is not nil" do
+      expect(current_response).to_not be_nil
+    end
+
+    it "returns an array of tasks" do
+      expect(current_response).to be_a(Array)
+    end
+
+    it "returns tasks" do
+      current_response.each{|x| expect(x.kind).to eq("task") }
+    end
+  end
+
+  describe ".create_task" do
+    let(:description) { "port 270" }
+    let(:current_response) { pivit.create_task(project_id, story_id, { :description => description })}
+
+    before(:each) do
+      stub_pivotal(:post, "/projects/#{project_id}/stories/#{story_id}/tasks?description=port%20270", "create_story_task.json")
+    end
+
+    it "is not nil" do
+      expect(current_response).to_not be_nil
     end
 
     it "returns the description specified" do
-      stub_request(:post, "https://www.pivotaltracker.com/services/v3/projects/795721/stories/48859617/tasks?task%5Bdescription%5D=find%20shields").
-        to_return(:status => 200,
-                  :body => File.open(File.expand_path("../../../fixtures/stubs/task.xml", __FILE__)),
-                  :headers => {'Accept' => 'application/xml', 'Content-type' => 'application/xml',})
-
-      current_response.description.should == description
+      expect(current_response.description).to eq(description)
     end
 
-    it "should be a hashie" do
-      stub_request(:post, "https://www.pivotaltracker.com/services/v3/projects/795721/stories/48859617/tasks?task%5Bdescription%5D=find%20shields").
-        to_return(:status => 200,
-                  :body => File.open(File.expand_path("../../../fixtures/stubs/task.xml", __FILE__)),
-                  :headers => {'Accept' => 'application/xml', 'Content-type' => 'application/xml',})
-
-      current_response.should be_a(Hashie::Mash)
+    it "returns a hashie" do
+      expect(current_response).to be_a(Hashie::Mash)
     end
   end
 
-  describe ".update_task", :type => :webmock do
-    let(:description) { "awesome new description" }
-    let(:current_response) { pivit.update_task(ENV["PROJECT"], ENV["STORY"], ENV["TASK"], { :description => description })}
+  describe ".update_task" do
+    let(:description) { "port 360" }
+    let(:current_response) { pivit.update_task(project_id, story_id, task_id, { :description => description })}
 
-    it "returns the task that was update" do
-      stub_request(:put, "https://www.pivotaltracker.com/services/v3/projects/795721/stories/48859617/tasks/14216257?task%5Bdescription%5D=awesome%20new%20description").
-        to_return(:status => 200,
-                  :body => File.open(File.expand_path("../../../fixtures/stubs/task_update.xml", __FILE__)),
-                  :headers => {'Accept' => 'application/xml', 'Content-type' => 'application/xml',})
-
-      current_response.should respond_to(:description)
+    before(:each) do
+      stub_pivotal(:put, "/projects/#{project_id}/stories/#{story_id}/tasks/#{task_id}?description=port%20360", "update_story_task.json")
     end
 
-    it "updates the attributes specified" do
-      stub_request(:put, "https://www.pivotaltracker.com/services/v3/projects/795721/stories/48859617/tasks/14216257?task%5Bdescription%5D=awesome%20new%20description").
-        to_return(:status => 200,
-                  :body => File.open(File.expand_path("../../../fixtures/stubs/task_update.xml", __FILE__)),
-                  :headers => {'Accept' => 'application/xml', 'Content-type' => 'application/xml',})
-
-      current_response.description.should == description
+    it "is not nil" do
+      expect(current_response).to_not be_nil
     end
 
-    it "should be a hashie" do
-      stub_request(:put, "https://www.pivotaltracker.com/services/v3/projects/795721/stories/48859617/tasks/14216257?task%5Bdescription%5D=awesome%20new%20description").
-        to_return(:status => 200,
-                  :body => File.open(File.expand_path("../../../fixtures/stubs/task_update.xml", __FILE__)),
-                  :headers => {'Accept' => 'application/xml', 'Content-type' => 'application/xml',})
+    it "returns the description specified" do
+      expect(current_response.description).to eq(description)
+    end
 
-      current_response.should be_a(Hashie::Mash)
+    it "returns a hashie" do
+      expect(current_response).to be_a(Hashie::Mash)
     end
   end
 
-  describe ".delete_task", :type => :webmock do
-    let(:current_response) { pivit.delete_task(ENV["PROJECT"], ENV["STORY"], ENV["TASK"]) }
-
-    it "returns the task that was deleted" do
-       stub_request(:delete, "https://www.pivotaltracker.com/services/v3/projects/795721/stories/48859617/tasks/14216257").
-        to_return(:status => 200,
-                  :body => File.open(File.expand_path("../../../fixtures/stubs/task.xml", __FILE__)),
-                  :headers => {'Accept' => 'application/xml', 'Content-type' => 'application/xml',})
-
-      current_response.id.should == ENV["TASK"].to_i
+  describe ".delete_task" do
+    before(:each) do
+      stub_pivotal(:delete, "/projects/#{project_id}/stories/#{story_id}/tasks/#{task_id}", "empty.json")
     end
 
-    it "should be a hashie" do
-       stub_request(:delete, "https://www.pivotaltracker.com/services/v3/projects/795721/stories/48859617/tasks/14216257").
-        to_return(:status => 200,
-                  :body => File.open(File.expand_path("../../../fixtures/stubs/task.xml", __FILE__)),
-                  :headers => {'Accept' => 'application/xml', 'Content-type' => 'application/xml',})
-
-      current_response.should be_a(Hashie::Mash)
+    it "makes a request to delete the task" do
+      pivit.delete_task(project_id, story_id, task_id)
+      expect(WebMock).to have_requested(:delete, "http://www.pivotaltracker.com/services/v5/projects/99/stories/555/tasks/5").once
     end
   end
 end
