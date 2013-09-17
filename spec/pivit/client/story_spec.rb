@@ -2,155 +2,167 @@ require "spec_helper"
 
 # Story Spec
 describe Pivit::Client::Story do
+  let!(:pivit) { Pivit::Client.new(:token => "super_secret") }
+  let(:project_id) { 99 }
+  let(:story_id) { 555 }
+
   before do
     Pivit.reset!
   end
 
-  let!(:pivit) { Pivit::Client.new(:token=> ENV["TOKEN"]) }
+  describe ".story" do
+    let(:current_response) { pivit.story(project_id, story_id) }
 
-  describe ".story", :vcr do
-    let(:current_response) { pivit.story(ENV["PROJECT"], ENV["STORY"]) }
+    before(:each) do
+      stub_pivotal(:get, "/projects/99/stories/555", "story.json", 200)
+    end
 
     it "should return the story response" do
-      current_response.should_not be_nil
-      current_response.should respond_to(:name)
+      expect(current_response).not_to be_nil
+    end
+
+    it "is of kind story" do
+      expect(current_response.kind).to eq("story")
+    end
+
+    it "is from the requested project" do
+      expect(current_response.project_id).to eq(project_id)
+    end
+
+    it "is the requested story" do
+      expect(current_response.id).to eq(story_id)
     end
   end
 
-  describe ".stories", :vcr => {:cassette_name => "story/stories"} do
-    let(:current_response) { pivit.stories(ENV["PROJECT"]) }
+  describe ".stories" do
+    let(:current_response) { pivit.stories(project_id) }
 
-    it "should return an array of stories" do
-      current_response.should be_a(Array)
-      current_response.first.should respond_to(:current_state)
+    before(:each) do
+      stub_pivotal(:get, "/projects/99/stories", "stories.json", 200)
     end
 
     it "should return the stories" do
-      current_response.should_not be_nil
+      expect(current_response).not_to be_nil
+    end
+
+    it "returns an array of stories" do
+      current_response.each{|x| expect(x.kind).to eq("story") }
+    end
+
+    it "is of type Array" do
+      expect(current_response).to be_a(Array)
     end
   end
 
-  describe ".create_story", :vcr => {:cassette_name => "story/create_story"} do
+  describe ".create_story" do
+    let(:name) { "Exhaust ports are ray shielded" }
+    let(:story_type) { "feature" }
     let(:current_response) { 
-      pivit.create_story(ENV["PROJECT"], 
-                      {
-                        :name => "Awesome Test story",
-                        :story_type =>"feature"
-                      }) 
+      pivit.create_story(
+        project_id, 
+        {
+          :name => name,
+          :story_type => story_type
+        }
+      ) 
     }
 
-    it "returns the story that was created" do
-      current_response.should respond_to(:name)
+    before(:each) do
+      stub_pivotal(:post, "/projects/99/stories?name=Exhaust%20ports%20are%20ray%20shielded&story_type=#{story_type}", "create_story.json")
+    end
+
+    it "is created with the story_type provided" do
+      expect(current_response.story_type).to eq(story_type)
+    end
+
+    it "is created with the name provided" do
+      expect(current_response.name).to eq(name)
     end
 
     it "should be a hashie" do
-      current_response.should be_a(Hashie::Mash)
+      expect(current_response).to be_a(Hashie::Mash)
     end
   end
 
-  describe ".update_story", :vcr => {:cassette_name => "story/update_story"} do
-    let(:name) { "awesome new name" }
-    let(:current_response) {  
-      pivit.update_story(ENV["PROJECT"], 
-                         ENV["STORY"],
-                        {
-                          :name => name
-                        }) 
+  describe ".update_story" do
+    let(:name) { "Bring me the passengers" }
+    let(:current_response) { 
+      pivit.update_story(
+        project_id, 
+        story_id,
+        {
+          :name => name
+        }
+      ) 
     }
 
-    it "returns the story that was update" do
-      current_response.should respond_to(:name)
+    before(:each) do
+      stub_pivotal(:put, "/projects/99/stories/555?name=Bring%20me%20the%20passengers", "update_story.json")
     end
 
-    it "updates the attributes specified" do
-      current_response.name.should == name
-    end
-
-    it "should be a hashie" do
-      current_response.should be_a(Hashie::Mash)
-    end
-  end
-
-  describe ".delete_story", :type => :webmock do
-    let(:current_response) { pivit.delete_story(ENV["PROJECT"], ENV["STORY"]) }
-
-    it "returns the story that was deleted" do
-      stub_request(:delete, "https://www.pivotaltracker.com/services/v3/projects/795721/stories/48859617").
-        to_return(:status => 200,
-                  :body => File.open(File.expand_path("../../../fixtures/stubs/story/delete_story.xml", __FILE__)),
-                  :headers => {'Accept' => 'application/xml', 'Content-type' => 'application/xml',})
-
-      current_response.id.should == ENV["STORY"].to_i
+    it "is updated with the name provided" do
+      expect(current_response.name).to eq(name)
     end
 
     it "should be a hashie" do
-      stub_request(:delete, "https://www.pivotaltracker.com/services/v3/projects/795721/stories/48859617").
-        to_return(:status => 200,
-                  :body => File.open(File.expand_path("../../../fixtures/stubs/story/delete_story.xml", __FILE__)),
-                  :headers => {'Accept' => 'application/xml', 'Content-type' => 'application/xml',})
-
-      current_response.should be_a(Hashie::Mash)
+      expect(current_response).to be_a(Hashie::Mash)
     end
   end
 
-  describe ".move_story_before", :type => :webmock do
-    let(:current_response) { pivit.move_story_before(ENV["PROJECT"], ENV["STORY"], ENV["STORY_B"]) }
+  context "## DEPRECEATED ##" do
+    describe ".move_story_before", :type => :webmock do
+      let(:current_response) { pivit.move_story_before(project_id, story_id, 11) }
 
-    it "returns the story that was moved" do
-      stub_request(:post, "https://www.pivotaltracker.com/services/v3/projects/795721/stories/48859617/moves?move%5Bmove%5D=before&move%5Btarget%5D=47998079").
-        to_return(:status => 200, 
-                  :body => File.open(File.expand_path("../../../fixtures/stubs/story/delete_story.xml", __FILE__)),
-                  :headers => {'Accept' => 'application/xml', 'Content-type' => 'application/xml',})
+      before(:each) do
+        stub_pivotal(:put, "/projects/99/stories/555?before_id=11", "update_story.json")
+      end
 
-      current_response.id.should == ENV["STORY"].to_i
+      it "returns the story that was moved" do
+        expect(current_response.id).to eq(story_id)
+      end
+
+      it "should be a hashie" do
+        expect(current_response).to be_a(Hashie::Mash)
+      end
     end
 
-    it "should be a hashie" do
-      stub_request(:post, "https://www.pivotaltracker.com/services/v3/projects/795721/stories/48859617/moves?move%5Bmove%5D=before&move%5Btarget%5D=47998079").
-        to_return(:status => 200, 
-                  :body => File.open(File.expand_path("../../../fixtures/stubs/story/delete_story.xml", __FILE__)),
-                  :headers => {'Accept' => 'application/xml', 'Content-type' => 'application/xml',})
+    describe ".move_story_after", :type => :webmock do
+      let(:current_response) { pivit.move_story_after(project_id, story_id, 11) }
 
-      current_response.should be_a(Hashie::Mash)
-    end
-  end
+      before(:each) do
+        stub_pivotal(:put, "/projects/99/stories/555?after_id=11", "update_story.json")
+      end
 
-  describe ".move_story_after", :type => :webmock do
-    let(:current_response) { pivit.move_story_after(ENV["PROJECT"], ENV["STORY"], ENV["STORY_B"]) }
+      it "returns the story that was moved" do
+        expect(current_response.id).to eq(story_id)
+      end
 
-    it "returns the story that was moved" do
-      stub_request(:post, "https://www.pivotaltracker.com/services/v3/projects/795721/stories/48859617/moves?move%5Bmove%5D=after&move%5Btarget%5D=47998079").
-        to_return(:status => 200, 
-                  :body => File.open(File.expand_path("../../../fixtures/stubs/story/delete_story.xml", __FILE__)),
-                  :headers => {'Accept' => 'application/xml', 'Content-type' => 'application/xml',})
-
-      current_response.id.should == ENV["STORY"].to_i
-    end
-
-    it "should be a hashie" do
-      stub_request(:post, "https://www.pivotaltracker.com/services/v3/projects/795721/stories/48859617/moves?move%5Bmove%5D=after&move%5Btarget%5D=47998079").
-        to_return(:status => 200, 
-                  :body => File.open(File.expand_path("../../../fixtures/stubs/story/delete_story.xml", __FILE__)),
-                  :headers => {'Accept' => 'application/xml', 'Content-type' => 'application/xml',})
-
-      current_response.should be_a(Hashie::Mash)
+      it "should be a hashie" do
+        expect(current_response).to be_a(Hashie::Mash)
+      end
     end
   end
 
-  describe ".add_attachment", :vcr => {:cassette_name => "story/attachment"} do
+  describe ".add_attachment" do
+    let(:file_path) { File.path(File.expand_path("../../../support/test.png", __FILE__)) }
     let(:current_response) { 
       pivit.add_attachment(
-        ENV["PROJECT"], 
-        ENV["STORY"], 
-        File.path(File.expand_path(ENV["FILE"], __FILE__))) 
+        project_id, 
+        story_id, 
+        file_path
+      )
     }
-    
-    it "adds the attachment to the story" do
-      current_response.should_not be_nil
+
+    before(:each) do
+      stub_pivotal(:post, "/projects/99/stories/555/attachments?file_name=#{file_path}", "update_story_attachement.json")
     end
 
-    it "returns the status is pending" do
-      current_response.status.should == "Pending"
+    it "is not nil" do
+      expect(current_response).to_not be_nil
+    end
+    
+    it "adds the attachment to the story" do
+      expect(current_response.comments.first.file_attachments).to_not be_empty
     end
   end
 end

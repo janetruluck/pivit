@@ -1,14 +1,15 @@
-# Stories
-
+# lib/client/story.rb
 module Pivit
   class Client
     # Story management
     # 
-    # @see http://www.pivotaltracker.com/help/api?version=v3#getting_stories
+    # @see https://www.pivotaltracker.com/help/api/rest/v5#Story
+    # @see https://www.pivotaltracker.com/help/api/rest/v5#Stories
+    # @see https://www.pivotaltracker.com/help/api/rest/v5#Story_Tasks
     module Story
       # Retrieve a single story from your account
       #
-      # @see http://www.pivotaltracker.com/help/api?version=v3#getting_stories
+      # @see https://www.pivotaltracker.com/help/api/rest/v5#projects_project_id_stories_story_id_get
       #
       # @param [Integer] project_id the id of the project that you want to retrieve stories from
       # @param [Integer] story_id the id of the story that you want to retrieve
@@ -20,17 +21,14 @@ module Pivit
       #
       # @author Jason Truluck
       def story(project_id, story_id, options = {})
-        get("projects/#{project_id}/stories/#{story_id}", options).story
+        get("projects/#{project_id}/stories/#{story_id}", options)
       end
-
       # Retrieve all stories from your account
       #
-      # @see http://www.pivotaltracker.com/help/api?version=v3#getting_stories
+      # @see https://www.pivotaltracker.com/help/api/rest/v5#projects_project_id_stories_get
       #
       # You can also use any filter option provided by pivotal tracker by
       # prefacing with the option :filter
-      #
-      # @see https://www.pivotaltracker.com/help/faq#howcanasearchberefined
       #
       # @param [Integer] project_id the id of the project that contains the stories
       #
@@ -39,19 +37,17 @@ module Pivit
       # @example 
       #   Pivit::Client.stories(1111111)
       #
-      #   
       #   Pivit::Client.stories(1111111, {:filter => "type:bug,chore"})
       # 
       # @author Jason Truluck
       def stories(project_id, options = {})
-        get("projects/#{project_id}/stories/", options).stories
+        get("projects/#{project_id}/stories", options)
       end
-
       # Create a story
       # 
       # Provide the parameters you want to use for the story via the options hash 
       #
-      # @see http://www.pivotaltracker.com/help/api?version=v3#add_story
+      # @see https://www.pivotaltracker.com/help/api/rest/v5#projects_project_id_stories_post
       #
       # @param [Integer] project_id the id of the project that contains the story
       #
@@ -62,16 +58,14 @@ module Pivit
       #
       # @author Jason Truluck
       def create_story(project_id, options = {})
-        options = { :story => options }
-        post("projects/#{project_id}/stories", options).story
+        post("projects/#{project_id}/stories", options)
       end
-
       # Update a story
       # 
       # Provide the parameters you want to use for the story via the options
       # hash 
       #
-      # @see http://www.pivotaltracker.com/help/api?version=v3#update_story
+      # @see https://www.pivotaltracker.com/help/api/rest/v5#projects_project_id_stories_story_id_put 
       #
       # @param [Integer] project_id the id of the project that contains the story
       # @param [Integer] story_id the id of the story that is getting updated
@@ -83,13 +77,12 @@ module Pivit
       #
       # @author Jason Truluck
       def update_story(project_id, story_id, options = {})
-        options = { :story => options }
-        put("projects/#{project_id}/stories/#{story_id}",  options).story
+        put("projects/#{project_id}/stories/#{story_id}",  options)
       end
     
       # Delete a story
       #
-      # @see http://www.pivotaltracker.com/help/api?version=v3#delete_story
+      # @see https://www.pivotaltracker.com/help/api/rest/v5#projects_project_id_stories_story_id_delete
       #
       # @param [Integer] project_id the id of the project that contains the story
       # @param [Integer] story_id the id of the story that is getting deleted
@@ -101,12 +94,15 @@ module Pivit
       ##
       # @author Jason Truluck
       def delete_story(project_id, story_id, options = {})
-        delete("projects/#{project_id}/stories/#{story_id}", options).story
+        delete("projects/#{project_id}/stories/#{story_id}", options)
       end
      
       # Move a story before another story
       #
-      # @see http://www.pivotaltracker.com/help/api?version=v3#move_story
+      # @depreceated Please use {update_story} instead since this has been
+      # rolled into available options
+      #
+      # @see https://www.pivotaltracker.com/help/api/rest/v5#projects_project_id_stories_story_id_put
       #
       # @param [Integer] project_id the id of the project that contains the story
       # @param [Integer] story_id the id of the story that is getting moved
@@ -119,12 +115,16 @@ module Pivit
       ##
       # @author Jason Truluck
       def move_story_before(project_id, story_id, story_target_id, options = {})
-        move_story(project_id, story_id, story_target_id, :before, options)
+        options.merge!({:before_id => story_target_id})
+        update_story(project_id, story_id, options)
       end
       
       # Move a story after another story
       #
-      # @see http://www.pivotaltracker.com/help/api?version=v3#move_story
+      # @depreceated Please use {update_story} instead since this has been
+      # rolled into available options
+      #
+      # @see https://www.pivotaltracker.com/help/api/rest/v5#projects_project_id_stories_story_id_put
       #
       # @param [Integer] project_id the id of the project that contains the story
       # @param [Integer] story_id the id of the story that is getting moved
@@ -137,7 +137,8 @@ module Pivit
       ##
       # @author Jason Truluck
       def move_story_after(project_id, story_id, story_target_id, options = {})
-        move_story(project_id, story_id, story_target_id, :after, options)
+        options.merge!({:after_id => story_target_id})
+        update_story(project_id, story_id, options)
       end
 
       # Add an attachement to a story
@@ -155,15 +156,8 @@ module Pivit
       ##
       # @author Jason Truluck
       def add_attachment(project_id, story_id, file, options = {})
-        options.merge!(:payload => file)
-        post("projects/#{project_id}/stories/#{story_id}/attachments", options).attachment
-      end
-
-
-      private
-      def move_story(project_id, story_id, story_target_id, direction, options = {})
-        options.merge!("move\[move\]" => direction, "move\[target\]" =>  story_target_id)
-        post("projects/#{project_id}/stories/#{story_id}/moves", options).story
+        options.merge!(:file_name => file)
+        post("projects/#{project_id}/stories/#{story_id}/attachments", options)
       end
     end
   end

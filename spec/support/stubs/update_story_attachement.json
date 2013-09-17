@@ -1,0 +1,35 @@
+{
+   "labels":
+   [
+   ],
+   "requested_by":
+   {
+       "email": "vader@deathstar.mil",
+       "name": "Darth Vader",
+       "id": 101,
+       "username": "vader",
+       "kind": "person",
+       "initials": "DV"
+   },
+   "id": 555,
+   "tasks":
+   [
+   ],
+   "comments":
+   [
+       {
+           "id": 112,
+           "text": "Here are the new plans.",
+           "file_attachments":
+           [
+               {
+                   "big_url": "/attachments/0000/0021/Corellian_corvette_deck_plan_thumb.tiff",
+                   "uploaded": true,
+                   "thumbnailable": false,
+                   "width": 650,
+                   "uploader_id": 101
+               }
+           ]
+       }
+   ]
+}
