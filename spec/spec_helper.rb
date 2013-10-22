@@ -21,11 +21,6 @@ require 'pivit'
 require 'webmock/rspec'
 require "mocha/api"
 
-authentications = File.expand_path("../fixtures/authentications.yml", __FILE__)
-if File.exists?(authentications)
-  ENV.update YAML::load(File.open(authentications))
-end
-
 WebMock.disable_net_connect!
 
 Dir[File.expand_path("spec/support/**/*.rb", __FILE__)].each {|f| require f}
@@ -34,4 +29,16 @@ RSpec.configure do |config|
   config.treat_symbols_as_metadata_keys_with_true_values = true
   config.order                                           = "random"
   config.color_enabled = true
+end
+
+def stub_pivotal(http_method = :any, endpoint = "/", return_json = "empty.json", status = 200)
+  stub_request(http_method, "http://www.pivotaltracker.com/services/v5#{endpoint}").
+    with(:headers => {
+    'User-Agent'      =>'Faraday v0.8.8',
+    'X-Trackertoken'  =>'super_secret'
+  }).
+    to_return(
+      :status   => status, 
+      :body     => File.read(File.expand_path("../support/stubs/#{return_json}", __FILE__)),
+      :headers  =>{'Accept' => 'application/json', 'Content-type' => 'application/json'})
 end

@@ -9,7 +9,7 @@ module Pivit
       if !options[:username].nil? && !options[:password].nil?
         self.username  = URI::encode(options[:username])
         self.password  = URI::encode(options[:password])
-        self.api_token = get("tokens/active").token.guid
+        self.api_token = get("/me").api_token
         build_endpoint
       elsif !options[:token].nil?
         self.api_token = options[:token]
